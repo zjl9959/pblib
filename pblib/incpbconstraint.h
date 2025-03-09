@@ -1,70 +1,82 @@
 #ifndef INCPBCONSTRAINT_H
 #define INCPBCONSTRAINT_H
 
-#include <vector>
 #include <assert.h>
-#include "weightedlit.h"
-#include "pbconstraint.h"
-#include "clausedatabase.h"
+
+#include <vector>
+
 #include "IncSimplePBConstraint.h"
 #include "auxvarmanager.h"
+#include "clausedatabase.h"
+#include "pbconstraint.h"
+#include "weightedlit.h"
 
-class IncPBConstraint
-{
-private:
-    int64_t leq;
-    int64_t geq;
-    int64_t init_leq;
-    int64_t init_geq;
+namespace PBLib {
 
-    std::vector<PBLib::WeightedLit> weighted_literals;
-    PBLib::Comparator comparator;
+class IncPBConstraint {
+ private:
+  int64_t leq;
+  int64_t geq;
+  int64_t init_leq;
+  int64_t init_geq;
 
-    std::shared_ptr<IncSimplePBConstraint> inc_simple_pb_constraint;
+  std::vector<PBLib::WeightedLit> weighted_literals;
+  PBLib::Comparator comparator;
 
-    bool isDualEncoded;
-    std::shared_ptr<IncSimplePBConstraint> leq_inc_simple_pb_constraint;
-    std::shared_ptr<IncSimplePBConstraint> geq_inc_simple_pb_constraint;
+  std::shared_ptr<IncSimplePBConstraint> inc_simple_pb_constraint;
 
-    std::vector<int32_t> conditionals;
+  bool isDualEncoded;
+  std::shared_ptr<IncSimplePBConstraint> leq_inc_simple_pb_constraint;
+  std::shared_ptr<IncSimplePBConstraint> geq_inc_simple_pb_constraint;
 
-public:
-    IncPBConstraint(std::vector<PBLib::WeightedLit> const & literals, PBLib::Comparator comparator, int64_t less_eq, int64_t greater_eq);
-    IncPBConstraint(std::vector<PBLib::WeightedLit> const & literals, PBLib::Comparator comparator, int64_t bound);
-    IncPBConstraint();
-    virtual ~IncPBConstraint() = default;
+  std::vector<int32_t> conditionals;
 
-    void addConditional(int32_t lit);
-    void addConditionals(std::vector<int32_t> lits);
-    void clearConditionals();
-    std::vector<int32_t> const & getConditionals() const;
+ public:
+  IncPBConstraint(std::vector<PBLib::WeightedLit> const& literals,
+                  PBLib::Comparator comparator, int64_t less_eq,
+                  int64_t greater_eq);
+  IncPBConstraint(std::vector<PBLib::WeightedLit> const& literals,
+                  PBLib::Comparator comparator, int64_t bound);
+  IncPBConstraint();
+  virtual ~IncPBConstraint() = default;
 
-    std::vector<PBLib::WeightedLit> const & getWeightedLiterals() const;
-    int64_t getLeq() const;
-    int64_t getGeq() const;
+  void addConditional(int32_t lit);
+  void addConditionals(std::vector<int32_t> lits);
+  void clearConditionals();
+  std::vector<int32_t> const& getConditionals() const;
 
-    std::shared_ptr< IncSimplePBConstraint > getIncSimplePBConstraint();
+  std::vector<PBLib::WeightedLit> const& getWeightedLiterals() const;
+  int64_t getLeq() const;
+  int64_t getGeq() const;
 
-    void setComparator(PBLib::Comparator comp);
-    void setIncSimplePBConstraint(std::shared_ptr< IncSimplePBConstraint > incSimplePBConstraint);
+  std::shared_ptr<IncSimplePBConstraint> getIncSimplePBConstraint();
 
-    void setLeqIncSimplePBConstraint(std::shared_ptr< IncSimplePBConstraint > incSimplePBConstraint);
-    void setGeqIncSimplePBConstraint(std::shared_ptr< IncSimplePBConstraint > incSimplePBConstraint);
+  void setComparator(PBLib::Comparator comp);
+  void setIncSimplePBConstraint(
+      std::shared_ptr<IncSimplePBConstraint> incSimplePBConstraint);
 
-    void encodeNewGeq(int64_t newGeq, ClauseDatabase & formula, AuxVarManager & auxVars);
-    void encodeNewLeq(int64_t newLeq, ClauseDatabase & formula, AuxVarManager & auxVars);
+  void setLeqIncSimplePBConstraint(
+      std::shared_ptr<IncSimplePBConstraint> incSimplePBConstraint);
+  void setGeqIncSimplePBConstraint(
+      std::shared_ptr<IncSimplePBConstraint> incSimplePBConstraint);
 
-    PBLib::PBConstraint getNonIncConstraint();
+  void encodeNewGeq(int64_t newGeq, ClauseDatabase& formula,
+                    AuxVarManager& auxVars);
+  void encodeNewLeq(int64_t newLeq, ClauseDatabase& formula,
+                    AuxVarManager& auxVars);
 
-    IncPBConstraint getGeqConstraint() const;
-    IncPBConstraint getLeqConstraint() const;
+  PBLib::PBConstraint getNonIncConstraint();
 
-    PBLib::Comparator getComparator() const;
+  IncPBConstraint getGeqConstraint() const;
+  IncPBConstraint getLeqConstraint() const;
 
-    int getN() const;
+  PBLib::Comparator getComparator() const;
 
-    void print() const;
+  int getN() const;
 
+  void print() const;
 };
 
-#endif // INCPBCONSTRAINT_H
+}  // namespace PBLib
+
+#endif  // INCPBCONSTRAINT_H

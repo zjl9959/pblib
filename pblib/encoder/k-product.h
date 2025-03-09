@@ -1,39 +1,45 @@
 #ifndef K_PRODUCT_AMO_H
 #define K_PRODUCT_AMO_H
-#include <vector>
 #include <sstream>
+#include <vector>
 
-#include "../SimplePBConstraint.h"
 #include "../IncSimplePBConstraint.h"
 #include "../PBConfig.h"
-#include "../clausedatabase.h"
+#include "../SimplePBConstraint.h"
 #include "../auxvarmanager.h"
+#include "../clausedatabase.h"
 #include "../weightedlit.h"
+#include "Encoder.h"
 #include "amo.h"
 #include "naive_amo_encoder.h"
-#include "Encoder.h"
+
+namespace PBLib {
 
 // A New SAT Encoding of the At-Most-One Constraint
 // Jingchao Chen 2010
 
-class k_Product : public Encoder
-{
-private:
-    AMO_Encoder basic_amo_encoder;
-    Naive_amo_encoder naive_amo_encoder;
-    int minimum_lit_count;
-    int k;
-    std::vector<Lit> _literals;
+class k_Product : public Encoder {
+ private:
+  AMO_Encoder basic_amo_encoder;
+  Naive_amo_encoder naive_amo_encoder;
+  int minimum_lit_count;
+  int k;
+  std::vector<Lit> _literals;
 
+  void encode_intern(std::vector<Lit>& literals, ClauseDatabase& formula,
+                     AuxVarManager& auxvars);
+  void encode_non_recursive(std::vector<Lit>& literals, ClauseDatabase& formula,
+                            AuxVarManager& auxvars);
 
-    void encode_intern( std::vector<Lit>& literals, ClauseDatabase & formula, AuxVarManager & auxvars);
-    void encode_non_recursive(std::vector< Lit > & literals, ClauseDatabase & formula, AuxVarManager & auxvars);
-public:
-    void encode(const SimplePBConstraint& pbconstraint, ClauseDatabase & formula, AuxVarManager & auxvars) override;
-    int64_t encodingValue(const SimplePBConstraint& pbconstraint) override;
+ public:
+  void encode(const SimplePBConstraint& pbconstraint, ClauseDatabase& formula,
+              AuxVarManager& auxvars) override;
+  int64_t encodingValue(const SimplePBConstraint& pbconstraint) override;
 
-    k_Product(PBConfig & config);
-    ~k_Product() override = default;
+  k_Product(PBConfig& config);
+  ~k_Product() override = default;
 };
 
-#endif // K_PRODUCT_AMO_H
+} /* namespace PBLib */
+
+#endif  // K_PRODUCT_AMO_H

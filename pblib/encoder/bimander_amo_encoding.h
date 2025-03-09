@@ -1,38 +1,43 @@
 #ifndef BIMANDER_AMO_ENCODING_H
 #define BIMANDER_AMO_ENCODING_H
 
-#include <vector>
 #include <sstream>
+#include <vector>
 
-#include "../SimplePBConstraint.h"
 #include "../IncSimplePBConstraint.h"
 #include "../PBConfig.h"
-#include "../clausedatabase.h"
+#include "../SimplePBConstraint.h"
 #include "../auxvarmanager.h"
+#include "../clausedatabase.h"
 #include "../weightedlit.h"
-#include "naive_amo_encoder.h"
 #include "Encoder.h"
+#include "naive_amo_encoder.h"
 
-class Bimander_amo_encoding :public Encoder
-{
-private:
-    std::vector<Lit> _literals;
-    std::vector<std::vector<Lit> > groups;
-    std::vector<Lit> bits;
-    int nBits;
-    int two_pow_nbits;
-    int k;
-    int m;
-    Naive_amo_encoder naive_amo_encoder;
+namespace PBLib {
 
+class Bimander_amo_encoding : public Encoder {
+ private:
+  std::vector<Lit> _literals;
+  std::vector<std::vector<Lit> > groups;
+  std::vector<Lit> bits;
+  int nBits;
+  int two_pow_nbits;
+  int k;
+  int m;
+  Naive_amo_encoder naive_amo_encoder;
 
-    void encode_intern( std::vector<Lit>& literals, ClauseDatabase & formula, AuxVarManager & auxvars);
-public:
-    void encode(const SimplePBConstraint& pbconstraint, ClauseDatabase & formula, AuxVarManager & auxvars) override;
-    int64_t encodingValue(const SimplePBConstraint& pbconstraint) override;
+  void encode_intern(std::vector<Lit>& literals, ClauseDatabase& formula,
+                     AuxVarManager& auxvars);
 
-    Bimander_amo_encoding(PBConfig & config);
-    ~Bimander_amo_encoding() override = default;
+ public:
+  void encode(const SimplePBConstraint& pbconstraint, ClauseDatabase& formula,
+              AuxVarManager& auxvars) override;
+  int64_t encodingValue(const SimplePBConstraint& pbconstraint) override;
+
+  Bimander_amo_encoding(PBConfig& config);
+  ~Bimander_amo_encoding() override = default;
 };
 
-#endif // BINARY_AMO_H
+}  // namespace PBLib
+
+#endif  // BINARY_AMO_H

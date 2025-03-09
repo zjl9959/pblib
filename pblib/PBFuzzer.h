@@ -1,25 +1,26 @@
 #ifndef PBFUZZER_H
 #define PBFUZZER_H
 
+#include <cstdint>
+#include <vector>
+
+#include "PBConfig.h"
 #include "pbconstraint.h"
 #include "weightedlit.h"
-#include "PBConfig.h"
-#include <vector>
-#include <cstdint>
 
-class PBFuzzer
-{
+namespace PBLib {
 
-std::vector<PBLib::WeightedLit> literals;
+class PBFuzzer {
+  std::vector<PBLib::WeightedLit> literals;
 
-void scramble(std::vector<PBLib::PBConstraint> & constraints);
+  void scramble(std::vector<PBLib::PBConstraint>& constraints);
 
-bool doScramble = true;
+  bool doScramble = true;
 
-
-public:
+ public:
   PBLib::PBConstraint generatePBConstraint();
-  PBLib::PBConstraint generatePBProblem(std::vector< PBLib::PBConstraint> & constraints);
+  PBLib::PBConstraint generatePBProblem(
+      std::vector<PBLib::PBConstraint>& constraints);
   int pAMO = 10;
   int pAMK = 20;
   int pBOTH = 100;
@@ -32,16 +33,22 @@ public:
   int max_constraint_size = 10;
   int max_big_constraint_size = 20;
   int max_weight_size = 100;
-  int64_t max_big_weight_size = 35184372088832;  // max_weight_size * max_opt_constraint_size <= 100000000000000000 // 17 digites
+  int64_t max_big_weight_size =
+      35184372088832;  // max_weight_size * max_opt_constraint_size <=
+                       // 100000000000000000 // 17 digites
   int max_opt_constraint_size = 10;
   int polarity_ratio = 50;
   int max_trivial_constraints = 1;
 
-    PBFuzzer() = default;
-    virtual ~PBFuzzer() = default;
+  PBFuzzer() = default;
+  virtual ~PBFuzzer() = default;
 
-    // copy constraints! DO NOT USE A REFERENCE HERE
-    void writeToPBFile(PBLib::PBConstraint opt_constraint, std::vector< PBLib::PBConstraint > constraints, int numVars, std::string file);
+  // copy constraints! DO NOT USE A REFERENCE HERE
+  void writeToPBFile(PBLib::PBConstraint opt_constraint,
+                     std::vector<PBLib::PBConstraint> constraints, int numVars,
+                     std::string file);
 };
 
-#endif // PBFUZZER_H
+}  // namespace PBLib
+
+#endif  // PBFUZZER_H

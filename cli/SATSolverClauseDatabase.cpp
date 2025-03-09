@@ -1,6 +1,7 @@
 #include "SATSolverClauseDatabase.h"
 
 using namespace std;
+using namespace PBLib;
 
 void SATSolverClauseDatabase::addClauseIntern(const vector< int32_t >& clause)
 {
